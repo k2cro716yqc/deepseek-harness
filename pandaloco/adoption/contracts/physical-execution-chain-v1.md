@@ -30,4 +30,3 @@ The DSH fork owns source, artifact, epoch, and adoption metadata. It does not ow
 ## Failure behavior
 
 A missing owner, contract digest, readiness result, capacity value, sandbox result, or source admission blocks the dependent edge. Implementations do not fall back from the Model Plane to a direct DSH provider, from centralized logs to an ungoverned sink, or from the current facade to a new public DSH endpoint.
-

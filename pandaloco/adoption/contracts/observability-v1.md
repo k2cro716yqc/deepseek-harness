@@ -19,4 +19,3 @@ Centralized DSH emission is disabled until the logging owner admits the exact so
 ## Live readiness
 
 The requested live route must prove current Model Plane, facade, worker, sandbox, Prometheus, Grafana, required exporter, watch, capacity, and deployment-owner readiness. The dated `SERVICE_DATA_PLANE_COMMAND_NOT_CONFIGURED` observation remains red until its owner closes it or supplies reviewed evidence that the selected route does not depend on that watch.
-

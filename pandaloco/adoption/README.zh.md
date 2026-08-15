@@ -8,7 +8,7 @@
 
 ## Authority
 
-[`authority-manifest.yaml`](authority-manifest.yaml) 指明已接受决策、精确 source baseline、write set 和 authorization ceiling。[`epochs/epoch-0001.yaml`](epochs/epoch-0001.yaml) 记录初始的 zero-source-delta epoch，但不声称 artifact、configuration 或 runtime 已经过测试。
+[`authority-manifest.yaml`](authority-manifest.yaml) 指明已接受决策、精确 source baseline、write set 和 authorization ceiling。[`CANDIDATE.sha256`](CANDIDATE.sha256) 固定规范性评审对象；[G0 result](gates/results/g0-result-v1.json) 及其他 G1-G5 result 绑定其 digest，结果生成后再由 [`MANIFEST.sha256`](MANIFEST.sha256) 固定完整分发内容。[`epochs/epoch-0001.yaml`](epochs/epoch-0001.yaml) 记录初始的 zero-source-delta epoch，但不声称 artifact、configuration 或 runtime 已经过测试。
 
 Pandaloco task service 保留 admission、authentication、attempt fencing、receipt、artifact 与业务终态的 authority。Harness session、turn、item、model、process、checkpoint 或 pull-request completion 只算 evidence。
 
@@ -22,7 +22,7 @@ V1 要求一个 active task attempt 独占一个 Linux DSH worker process，并�
 
 1. 阅读 [`authority-manifest.yaml`](authority-manifest.yaml) 和两份 source audit。
 2. 阅读 epoch、attempt、terminal、receipt、persistence、physical execution、runtime selection、observability 和 platform 规则。
-3. 评估 [`gates/gate-matrix-v1.yaml`](gates/gate-matrix-v1.yaml)，并使用 [`gates/gate-result-v1.schema.json`](gates/gate-result-v1.schema.json) 校验结果。
+3. 评估 [`gates/gate-matrix-v1.yaml`](gates/gate-matrix-v1.yaml)，从 [G0 result](gates/results/g0-result-v1.json) 开始检查每个已声明 G0-G5 result，使用 [`gates/gate-result-v1.schema.json`](gates/gate-result-v1.schema.json) 校验并重现其 candidate 与 evidence digest。
 4. 使用 [`ownership/cross-repo-dag-v1.yaml`](ownership/cross-repo-dag-v1.yaml) 核验 ownership。
 5. 只有在目标 phase 的全部 dependency 通过后，才可使用 upgrade 和 rollback 文档。
 

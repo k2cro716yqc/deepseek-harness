@@ -25,4 +25,3 @@ Rollback never changes an active attempt's epoch and never rewrites another epoc
 - Two processes hold a live writer lease for one session.
 - A rollback overwrites candidate state with old-epoch files.
 - Cleanup begins while an executable descendant or writer remains live.
-

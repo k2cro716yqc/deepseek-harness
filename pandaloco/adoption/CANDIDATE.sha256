@@ -1,7 +1,6 @@
 be7f9958f5ea8b931932f01ce23bf7dcc526e812d44c9aa23765dc28f29b3b00  .agents/notes/proposed/process/2026-08-15-pandaloco-adoption-control-plane.i18n.yaml
 4ba893f4738e474f27239b260ac20ccd4f1ec70efc8b0b800f48f9dc9d4ce5f5  .agents/notes/proposed/process/2026-08-15-pandaloco-adoption-control-plane.md
 57ddc4e98cc4b496258d54d7d8be5f493b770564d88a2671a97e7f8e3d3cbd7e  .agents/notes/proposed/process/2026-08-15-pandaloco-adoption-control-plane.zh.md
-1f2bdef6579c03973dd346568dc31e821f13810e03648ef96fbe61b14a0983ba  pandaloco/adoption/CANDIDATE.sha256
 3d0516e0d5c844a07afe7898bd18417dafa287caefcd1c3c8a3dc40f56cf6840  pandaloco/adoption/README.i18n.yaml
 7a474e24d77351c254d87e1dfc7913def5327adab06131dec40405555399482d  pandaloco/adoption/README.md
 0e1625d53f2ae458bade3e67e974e8e3b1ad61d4fea12abcc91a892958617079  pandaloco/adoption/README.zh.md
@@ -19,12 +18,6 @@ b6ea74beff503f0a8de8e934d4e8ff147eaeca04b5b712876c54f92daac858aa  pandaloco/adop
 ceaba19d2146cd2f20788343732405ea72113e21193262db253866a61c947a7f  pandaloco/adoption/epochs/patch-ledger.yaml
 1f400aa046da7a3e623ce074b34ee8c04ad0da1fa423b95f937ae9b568a83201  pandaloco/adoption/gates/gate-matrix-v1.yaml
 0e0b01a4f8001f584cf2b4b61ef7e578850bc0aed39d879002cfdbee6cf4dba1  pandaloco/adoption/gates/gate-result-v1.schema.json
-3abd7027dfc4b8372be6569076d9f5f76d28060bb05366866dfa96a4406f0f79  pandaloco/adoption/gates/results/g0-result-v1.json
-6e90a07c5a41e9b2a3d810713f5b691a97c3fb6d2a38781496f5ee0efd00c42f  pandaloco/adoption/gates/results/g1-result-v1.json
-02835419228b7d4ff2b64f09629f339d3adf77617281acde9c56e54c7213d0c1  pandaloco/adoption/gates/results/g2-result-v1.json
-069a521f6c6508fd6ad6d903a90e81cb99458a815727e1c51e947a5068022236  pandaloco/adoption/gates/results/g3-result-v1.json
-1e7e7128d2f5a79c9a8b75f120ebb4c74588a0f48cd75977c0400d4a03113c9c  pandaloco/adoption/gates/results/g4-result-v1.json
-486c8632a31648b83706f92854997a82130b329c7f265a5c82e7d1d3e982d381  pandaloco/adoption/gates/results/g5-result-v1.json
 07ab3384fb5e897d2b99284132467cf55972603ccb54c6727807f6c2388ca0fa  pandaloco/adoption/ownership/cross-repo-dag-v1.yaml
 9317bb12e1bac3793608abf795da14529bac3a2e5df28f4dcc2301d90754b75c  pandaloco/adoption/source-audits/epoch-0001.md
 5425d3584ddbbeb5f6748f5ea79c275fef3c745e2e5a43fe2bb24cbc98e5f220  pandaloco/adoption/source-audits/physical-chain-2026-08-15.md

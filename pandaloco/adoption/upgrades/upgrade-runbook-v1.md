@@ -28,4 +28,3 @@ The release authority verifies every required gate result, candidate and current
 ## Fail and recover
 
 A source, patch, configuration, artifact, schema, security, capacity, owner, readiness, or evidence mismatch blocks promotion. Stop selecting the candidate, drain or quarantine its attempts, reconcile effects and terminal state, and select the known-good epoch for new attempts. Do not overwrite roots, mutate running attempt identities, or rebuild under the same epoch identity.
-

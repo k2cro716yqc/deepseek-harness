@@ -15,7 +15,7 @@ gates:
     timeout_seconds: 30
     repetitions: 1
     threshold: all-assertions
-    evidence_path: pandaloco-coordination:codex/coordination/session-logs/2026-08-15-dsh-physical-chain-wp0-revision-deep-review.session-log.md
+    evidence_path: results/g0-result-v1.json
     current_state: pass
     failure_code: WP0_BASE_DRIFT
   - gate_id: G1
@@ -31,7 +31,7 @@ gates:
     timeout_seconds: 30
     repetitions: 1
     threshold: zero-extra-paths
-    evidence_path: pandaloco-coordination:codex/test-reports/2026-08-15-dsh-wp0-static-validation.test-report.md
+    evidence_path: results/g1-result-v1.json
     current_state: pass
     failure_code: WP0_SCOPE_VIOLATION
   - gate_id: G2
@@ -39,7 +39,7 @@ gates:
     phase: WP-0
     accountable_owner: dsh-fork-maintainer
     dependencies: [G1]
-    fixture: { kind: static-doc-schema, reference: ../MANIFEST.sha256 }
+    fixture: { kind: static-doc-schema, reference: ../CANDIDATE.sha256 }
     oracle: YAML and JSON parse, schema examples behave as declared, links resolve, and bilingual blob hashes and structure match
     expected_result: pass
     allowed_effects: [repository-read, git-object-hash]
@@ -47,7 +47,7 @@ gates:
     timeout_seconds: 120
     repetitions: 1
     threshold: all-files
-    evidence_path: pandaloco-coordination:codex/test-reports/2026-08-15-dsh-wp0-static-validation.test-report.md
+    evidence_path: results/g2-result-v1.json
     current_state: pass
     failure_code: WP0_SCHEMA_INVALID
   - gate_id: G3
@@ -63,7 +63,7 @@ gates:
     timeout_seconds: 60
     repetitions: 1
     threshold: all-counterexamples
-    evidence_path: pandaloco-coordination:codex/test-reports/2026-08-15-dsh-wp0-static-validation.test-report.md
+    evidence_path: results/g3-result-v1.json
     current_state: pass
     failure_code: WP0_TERMINAL_AUTHORITY_BYPASS
   - gate_id: G4
@@ -79,7 +79,7 @@ gates:
     timeout_seconds: 60
     repetitions: 1
     threshold: zero-cycles-zero-unowned-nodes-zero-unclassified-contracts
-    evidence_path: pandaloco-coordination:codex/test-reports/2026-08-15-dsh-wp0-static-validation.test-report.md
+    evidence_path: results/g4-result-v1.json
     current_state: pass
     failure_code: WP0_AUTHORITY_CONFLICT
   - gate_id: G5
@@ -87,7 +87,7 @@ gates:
     phase: WP-0
     accountable_owner: dsh-fork-maintainer
     dependencies: [G1, G2, G3, G4]
-    fixture: { kind: repository-manifest, reference: ../MANIFEST.sha256 }
+    fixture: { kind: candidate-subject-manifest, reference: ../CANDIDATE.sha256 }
     oracle: repo-root-relative lexical manifest reproduces and no secret, absolute host path, production endpoint, or forbidden pass claim exists
     expected_result: pass
     allowed_effects: [repository-read, content-hash]
@@ -95,7 +95,7 @@ gates:
     timeout_seconds: 120
     repetitions: 1
     threshold: all-files
-    evidence_path: pandaloco-coordination:codex/test-reports/2026-08-15-dsh-wp0-static-validation.test-report.md
+    evidence_path: results/g5-result-v1.json
     current_state: pass
     failure_code: WP0_MANIFEST_MISMATCH
   - gate_id: G6

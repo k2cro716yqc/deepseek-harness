@@ -16,6 +16,8 @@ DSH filesystem and tool controls are also insufficient as host isolation. They d
 
 Pandaloco will maintain a tracked fork and identify every executable DSH release as an immutable runtime epoch containing exact upstream and fork source, downstream delta, resolved configuration, tested artifact, provenance, SBOM, license, patch ledger, gate matrix, storage policy, and rollback identity. Candidate and current epochs will coexist for validation; floating or overwrite upgrades are invalid.
 
+Static gate claims will use a two-level identity. A candidate-subject manifest excludes gate results and the final distribution manifest, each G0-G5 result binds that stable subject and its evidence, and the final distribution manifest covers the results. A static PASS without that versioned binding is invalid.
+
 DSH will remain an internal execution engine behind the existing Pandaloco facade. An internal selector will bind one admitted task attempt to exactly one legacy or DSH epoch for its lifetime. Pandaloco will retain admission, authentication, attempt fencing, tool and specialist authorization, receipts, artifacts, and the unique business-terminal compare-and-set operation.
 
 Production DSH model calls will use the Model Plane `/model-tasks` interface. Provider credentials, profiles, routing, fallback, egress, error normalization, latency, and usage will remain Model Plane responsibilities. DSH will map cognitive work to model tasks without loading a direct provider in a production epoch.
@@ -46,7 +48,7 @@ Physical registry, service onboarding, and deploy, cutover, and rollback actions
 
 ## Acceptance criteria
 
-- The fork contains the versioned adoption files, deterministic manifest, and complete English, Chinese, and pairing-record triplet.
+- The fork contains the versioned adoption files, candidate-subject and distribution manifests, schema-valid G0-G5 results, and complete English, Chinese, and pairing-record triplets.
 - Machine-readable rules reject direct production provider access, a parallel public API, ambiguous runtime selection, multiple authoritative effect paths, unowned deployment, unadmitted logs, high-cardinality metric labels, and unbudgeted live shadow execution.
 - Epoch identity covers source, configuration, artifact, provenance, supply chain, patches, storage, gates, and rollback without claiming absent evidence.
 - Physical owner and dependency records keep incomplete service onboarding, capacity, watch health, centralized logging, outer sandbox, and runtime evidence red.
@@ -55,4 +57,3 @@ Physical registry, service onboarding, and deploy, cutover, and rollback actions
 ## Risks
 
 The control documents add maintenance work and can drift from source or physical owner contracts if upgrades skip their review. Static validation cannot prove runtime isolation, provider routing, effect suppression, performance, or recovery. Per-task processes and side-by-side epochs consume more memory, storage, GPU headroom, and operational effort than a shared in-place runtime. The proposal accepts those costs to preserve task isolation, reproducibility, bounded fork drift, and rollback.
-

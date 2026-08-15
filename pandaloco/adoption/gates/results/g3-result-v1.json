@@ -1,0 +1,29 @@
+{
+  "schema_version": "pandaloco-gate-result/v1",
+  "matrix_version": "pandaloco-dsh-gates/v1",
+  "subject": {
+    "adoption_id": "pandaloco-deepseek-harness",
+    "runtime_epoch": "dsh-epoch-0001",
+    "candidate_manifest_reference": "pandaloco/adoption/CANDIDATE.sha256",
+    "candidate_manifest_digest_sha256": "1f2bdef6579c03973dd346568dc31e821f13810e03648ef96fbe61b14a0983ba",
+    "source_commit": "47f943859bef60e4160492346772ded9b24f765a",
+    "source_tree": "f904efab9ef435201d6ba4da88a34d6366568272",
+    "resolved_config_digest_sha256": null,
+    "gate_subject_digests": [
+      { "role": "terminal-projection-contract", "digest_sha256": "603ffc522ad385119797400692425a4c530f2f70a8304c44896b29cf941ca252" },
+      { "role": "specialist-receipt-schema", "digest_sha256": "3713e7e79fd08ecbbb0b2d82791d4fecbbc5460371a1be44a7896cd19dea3bdd" }
+    ]
+  },
+  "gate_id": "G3",
+  "evaluated_at": "2026-08-15T16:41:31Z",
+  "status": "pass",
+  "expected_result": "all terminal authority and receipt counterexamples are rejected",
+  "actual_result": "all terminal authority and receipt counterexamples are rejected",
+  "oracle_decision": "matched",
+  "evidence": [
+    { "reference": "pandaloco/adoption/contracts/terminal-projection-v1.md", "digest_sha256": "603ffc522ad385119797400692425a4c530f2f70a8304c44896b29cf941ca252" },
+    { "reference": "pandaloco/adoption/contracts/specialist-owner-receipt-v1.schema.json", "digest_sha256": "3713e7e79fd08ecbbb0b2d82791d4fecbbc5460371a1be44a7896cd19dea3bdd" }
+  ],
+  "evaluator": "pandaloco-wp0-static-validator/v2",
+  "failure_code": null
+}

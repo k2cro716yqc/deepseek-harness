@@ -14,11 +14,10 @@ Exactly one selected route may issue authoritative tool requests, owner-receipt 
 |---|---|---|---|---|
 | `recorded-replay` | Replays accepted recorded inputs | None | None | Privacy and fixture admission |
 | `live-single-route` | Selected route only | Selected route only | Selected route | Runtime gates and capacity |
-| `live-dual-route` | Legacy and DSH | Selected route only; candidate is effect-suppressed | Selected route only | Separate worker, GPU, model-residency, concurrency, time, cost, privacy, and suppression evidence |
+| `live-dual-route` | Legacy and DSH | Selected route only; the non-selected route is effect-suppressed | Selected route only | Separate worker, GPU, model-residency, concurrency, time, cost, privacy, and suppression evidence |
 
 `recorded-replay` is the default comparison mode. `live-dual-route` remains blocked when any budget or suppression proof is absent.
 
 ## Rollback
 
 Rollback changes selection for new attempts to a known-good epoch. Existing attempts remain bound to their selected epoch and are drained, killed, or quarantined under the persistence and terminal rules; they are never resumed through another epoch.
-

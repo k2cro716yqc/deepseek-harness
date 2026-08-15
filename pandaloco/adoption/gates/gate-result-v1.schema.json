@@ -25,6 +25,7 @@
       "properties": {
         "adoption_id": { "const": "pandaloco-deepseek-harness" },
         "runtime_epoch": { "minLength": 1, "type": "string" },
+        "candidate_manifest_reference": { "const": "pandaloco/adoption/CANDIDATE.sha256" },
         "candidate_manifest_digest_sha256": { "pattern": "^[0-9a-f]{64}$", "type": "string" },
         "source_commit": { "pattern": "^[0-9a-f]{40}$", "type": "string" },
         "source_tree": { "pattern": "^[0-9a-f]{40}$", "type": "string" },
@@ -43,7 +44,7 @@
           "type": "array"
         }
       },
-      "required": ["adoption_id", "runtime_epoch", "candidate_manifest_digest_sha256", "source_commit", "source_tree", "resolved_config_digest_sha256", "gate_subject_digests"],
+      "required": ["adoption_id", "runtime_epoch", "candidate_manifest_reference", "candidate_manifest_digest_sha256", "source_commit", "source_tree", "resolved_config_digest_sha256", "gate_subject_digests"],
       "type": "object"
     },
     "gate_id": { "pattern": "^G(?:[0-9]|1[0-5])$", "type": "string" },
@@ -83,7 +84,7 @@
   ],
   "x-verifier-contract": {
     "authority": "pandaloco-gate-evaluator",
-    "required_context": ["expected_runtime_epoch", "expected_candidate_manifest_digest_sha256", "expected_source_commit", "expected_source_tree", "expected_resolved_config_digest_sha256", "gate_matrix_row", "gate_specific_subject_digests"],
+    "required_context": ["expected_runtime_epoch", "expected_candidate_manifest_reference", "expected_candidate_manifest_digest_sha256", "expected_source_commit", "expected_source_tree", "expected_resolved_config_digest_sha256", "gate_matrix_row", "gate_specific_subject_digests"],
     "required_checks": ["subject-exactly-equals-current-context", "gate-row-exists-and-version-matches", "evidence-digests-reproduce", "actual-result-evaluated-by-row-oracle", "pass-only-when-oracle-matched"],
     "reuse_rule": "a result from another epoch, candidate manifest, source tree, resolved configuration, or gate-specific subject is rejected"
   },
@@ -94,6 +95,7 @@
       "subject": {
         "adoption_id": "pandaloco-deepseek-harness",
         "runtime_epoch": "dsh-epoch-0001",
+        "candidate_manifest_reference": "pandaloco/adoption/CANDIDATE.sha256",
         "candidate_manifest_digest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
         "source_commit": "47f943859bef60e4160492346772ded9b24f765a",
         "source_tree": "f904efab9ef435201d6ba4da88a34d6366568272",
@@ -126,6 +128,7 @@
         "subject": {
           "adoption_id": "pandaloco-deepseek-harness",
           "runtime_epoch": "dsh-epoch-0001",
+          "candidate_manifest_reference": "pandaloco/adoption/CANDIDATE.sha256",
           "candidate_manifest_digest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
           "source_commit": "47f943859bef60e4160492346772ded9b24f765a",
           "source_tree": "f904efab9ef435201d6ba4da88a34d6366568272",
@@ -150,6 +153,7 @@
         "subject": {
           "adoption_id": "pandaloco-deepseek-harness",
           "runtime_epoch": "dsh-epoch-0001",
+          "candidate_manifest_reference": "pandaloco/adoption/CANDIDATE.sha256",
           "candidate_manifest_digest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
           "source_commit": "47f943859bef60e4160492346772ded9b24f765a",
           "source_tree": "f904efab9ef435201d6ba4da88a34d6366568272",
@@ -175,6 +179,7 @@
         "subject": {
           "adoption_id": "pandaloco-deepseek-harness",
           "runtime_epoch": "dsh-epoch-0001",
+          "candidate_manifest_reference": "pandaloco/adoption/CANDIDATE.sha256",
           "candidate_manifest_digest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
           "source_commit": "47f943859bef60e4160492346772ded9b24f765a",
           "source_tree": "f904efab9ef435201d6ba4da88a34d6366568272",
@@ -200,6 +205,7 @@
         "subject": {
           "adoption_id": "pandaloco-deepseek-harness",
           "runtime_epoch": "dsh-epoch-0001",
+          "candidate_manifest_reference": "pandaloco/adoption/CANDIDATE.sha256",
           "candidate_manifest_digest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
           "source_commit": "47f943859bef60e4160492346772ded9b24f765a",
           "source_tree": "f904efab9ef435201d6ba4da88a34d6366568272",
@@ -225,6 +231,7 @@
         "subject": {
           "adoption_id": "pandaloco-deepseek-harness",
           "runtime_epoch": "dsh-epoch-0001",
+          "candidate_manifest_reference": "pandaloco/adoption/CANDIDATE.sha256",
           "candidate_manifest_digest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
           "source_commit": "47f943859bef60e4160492346772ded9b24f765a",
           "source_tree": "f904efab9ef435201d6ba4da88a34d6366568272",

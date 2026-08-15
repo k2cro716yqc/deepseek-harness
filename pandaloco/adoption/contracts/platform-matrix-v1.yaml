@@ -29,4 +29,3 @@ requirements:
   clean_environment: required
   per_attempt_roots: required
 unknown_platform_result: unsupported-fail-closed
-

@@ -34,4 +34,3 @@ The tuple `(task_id, attempt_id, runtime_epoch)` is immutable. A lease renewal m
 - A running attempt that changes `runtime_epoch` is quarantined.
 - An attempt without a current fencing value cannot issue effects or terminal state.
 - A second live writer for the same attempt is rejected even if it reuses the DSH session identifier.
-

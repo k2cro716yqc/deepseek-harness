@@ -8,7 +8,7 @@ nodes:
     base: 47f943859bef60e4160492346772ded9b24f765a
     contract: pandaloco/adoption/authority-manifest.yaml
     contract_version: pandaloco-adoption-authority/v1
-    contract_digest_sha256: 0b23d8ff63ff003c5ea699c8710b15132787a7983d8b7505c74b377ee43a54f5
+    contract_digest_sha256: f904c6e3f132144faccb64bbccca75ad7b06b3d38f987035b83aec1a49692066
     contract_state: pinned
     write_fence: pandaloco/adoption/** plus exact Agent Note triplet
     evidence_return: pandaloco/adoption/MANIFEST.sha256
@@ -41,7 +41,7 @@ nodes:
     base: 44678a1472080f43f91fb3296e7bbe3aacabaf0c
     contract: pandaloco/adoption/contracts/runtime-selection-v1.md
     contract_version: runtime-selection/v1
-    contract_digest_sha256: 4c3f7b7c8b55c6970eebdd9a4b07e47032ed466453cf2be7b06f7182481e9a2d
+    contract_digest_sha256: 758ccb527e42904468a6112eb337551de6d9e20117250a3d66678325f62a931a
     contract_state: pinned
     write_fence: future-owner-package-required
     evidence_return: future:pdlc-multiagent-local/runtime-selector
@@ -207,17 +207,17 @@ edges:
   - { source: terminal-projector, target: java-business-authorities, target_contract_digest_sha256: null }
   - { source: runtime-selector, target: existing-agent-facade, target_contract_digest_sha256: ce35538a7c28b27bd2c9a2430a84cac4733a6a544f419a823499b608f1f17108 }
   - { source: runtime-selector, target: pandaloco-task-authority, target_contract_digest_sha256: ce35538a7c28b27bd2c9a2430a84cac4733a6a544f419a823499b608f1f17108 }
-  - { source: legacy-agent-runtime, target: runtime-selector, target_contract_digest_sha256: 4c3f7b7c8b55c6970eebdd9a4b07e47032ed466453cf2be7b06f7182481e9a2d }
-  - { source: dsh-per-task-worker, target: runtime-selector, target_contract_digest_sha256: 4c3f7b7c8b55c6970eebdd9a4b07e47032ed466453cf2be7b06f7182481e9a2d }
-  - { source: dsh-per-task-worker, target: dsh-fork-distribution, target_contract_digest_sha256: 0b23d8ff63ff003c5ea699c8710b15132787a7983d8b7505c74b377ee43a54f5 }
+  - { source: legacy-agent-runtime, target: runtime-selector, target_contract_digest_sha256: 758ccb527e42904468a6112eb337551de6d9e20117250a3d66678325f62a931a }
+  - { source: dsh-per-task-worker, target: runtime-selector, target_contract_digest_sha256: 758ccb527e42904468a6112eb337551de6d9e20117250a3d66678325f62a931a }
+  - { source: dsh-per-task-worker, target: dsh-fork-distribution, target_contract_digest_sha256: f904c6e3f132144faccb64bbccca75ad7b06b3d38f987035b83aec1a49692066 }
   - { source: dsh-per-task-worker, target: outer-sandbox, target_contract_digest_sha256: 7105f34c9dc1c80aedd2096e5e117b8a979482bdfd3504fe8de3b33110767f9b }
   - { source: dsh-per-task-worker, target: model-plane, target_contract_digest_sha256: c9982944642480ad1bb84637698365bd9c4e35ca7a3194ce9cac9214bb320eae }
   - { source: dsh-per-task-worker, target: specialist-broker, target_contract_digest_sha256: 3713e7e79fd08ecbbb0b2d82791d4fecbbc5460371a1be44a7896cd19dea3bdd }
   - { source: specialist-broker, target: domain-authorities, target_contract_digest_sha256: null }
   - { source: agent-service-onboarding, target: physical-control-registry, target_contract_digest_sha256: 1450df6dab05d9e2e1d2f026de6019da061f10d3615516a60ec37e8fc1e03c4b }
-  - { source: agent-service-onboarding, target: dsh-fork-distribution, target_contract_digest_sha256: 0b23d8ff63ff003c5ea699c8710b15132787a7983d8b7505c74b377ee43a54f5 }
+  - { source: agent-service-onboarding, target: dsh-fork-distribution, target_contract_digest_sha256: f904c6e3f132144faccb64bbccca75ad7b06b3d38f987035b83aec1a49692066 }
   - { source: deploy-ops, target: agent-service-onboarding, target_contract_digest_sha256: null }
   - { source: deploy-ops, target: physical-control-registry, target_contract_digest_sha256: 1450df6dab05d9e2e1d2f026de6019da061f10d3615516a60ec37e8fc1e03c4b }
   - { source: metrics-stack, target: agent-service-onboarding, target_contract_digest_sha256: null }
   - { source: centralized-log-admission, target: agent-service-onboarding, target_contract_digest_sha256: null }
-  - { source: phys-full-index, target: dsh-fork-distribution, target_contract_digest_sha256: 0b23d8ff63ff003c5ea699c8710b15132787a7983d8b7505c74b377ee43a54f5 }
+  - { source: phys-full-index, target: dsh-fork-distribution, target_contract_digest_sha256: f904c6e3f132144faccb64bbccca75ad7b06b3d38f987035b83aec1a49692066 }

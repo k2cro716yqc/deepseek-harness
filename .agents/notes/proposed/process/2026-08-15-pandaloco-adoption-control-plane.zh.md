@@ -16,6 +16,8 @@ DSH 的文件系统和工具控制也不足以充当宿主隔离。它们本身�
 
 Pandaloco 将维护 tracked fork，并把每个可执行 DSH 版本标识为不可变的 runtime epoch（运行时纪元），其中包含确定的上游与 fork 源码、下游差异、已解析配置、已测试产物、来源证明、SBOM、许可证、补丁账本、质量门禁矩阵、存储策略和回滚身份。候选与当前 epoch 将并存验证；浮动升级或覆盖升级均为非法。
 
+静态 gate 声明使用两层身份。Candidate-subject manifest 排除 gate result 和最终 distribution manifest；每个 G0-G5 result 绑定这个稳定 subject 及其 evidence；最终 distribution manifest 再覆盖这些 result。缺少该版本化绑定的静态 PASS 无效。
+
 DSH 将作为现有 Pandaloco facade 后面的内部执行引擎。内部选择器会在一个已准入任务 attempt 创建时，将它终身绑定到唯一的 legacy 或 DSH epoch。Pandaloco 保留准入、认证、attempt fencing、工具和 specialist 授权、receipt、产物以及唯一业务终态 compare-and-set 操作。
 
 生产 DSH 模型调用将使用 Model Plane 的 `/model-tasks` 接口。模型提供方凭据、profile、路由、fallback、egress、错误归一化、延迟和用量仍由 Model Plane 负责。DSH 只把认知工作映射为模型任务，生产 epoch 不加载直连模型提供方。
@@ -46,7 +48,7 @@ Legacy 与 DSH runtime 将并存，直到另行评审通过移除旧 runtime 的
 
 ## 验收标准
 
-- Fork 包含版本化接纳文件、确定性 manifest，以及完整的英文、中文和配对记录三件套。
+- Fork 包含版本化接纳文件、candidate-subject 与 distribution manifest、schema-valid G0-G5 result，以及完整的英文、中文和配对记录三件套。
 - 机器可读规则会拒绝生产环境直连模型提供方、平行公共 API、含糊 runtime selection、多条权威作用路径、无所有者部署、未准入日志、高基数指标标签和无预算 live shadow execution。
 - Epoch 身份覆盖源码、配置、产物、来源证明、供应链、补丁、存储、质量门禁和回滚，同时不会声称不存在的证据。
 - 物理所有者和依赖记录会让未完成的服务接入、容量、watch 健康、集中日志、外层沙箱和 runtime 证据保持 RED。
@@ -55,4 +57,3 @@ Legacy 与 DSH runtime 将并存，直到另行评审通过移除旧 runtime 的
 ## 风险
 
 这些控制文档增加了维护成本；如果升级绕过评审，它们可能与源码或物理所有者约定发生漂移。静态验证无法证明 runtime 隔离、模型提供方路由、effect suppression、性能或恢复。与共享原地 runtime 相比，per-task 进程和 side-by-side epoch 会消耗更多内存、存储、GPU 余量和运维投入。该提案接受这些成本，以保留任务隔离、可重现性、受控 fork 漂移和回滚能力。
-

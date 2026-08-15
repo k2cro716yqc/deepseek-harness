@@ -26,6 +26,26 @@ normative_rules:
   deployment_owner: phys-deploy-ops
   metrics_owner: phys-observability-stack
   centralized_log_admission: required-before-emission
+identity_manifests:
+  candidate_subject:
+    path: pandaloco/adoption/CANDIDATE.sha256
+    excludes:
+      - pandaloco/adoption/CANDIDATE.sha256
+      - pandaloco/adoption/MANIFEST.sha256
+      - pandaloco/adoption/gates/results/**
+  distribution:
+    path: pandaloco/adoption/MANIFEST.sha256
+    excludes:
+      - pandaloco/adoption/MANIFEST.sha256
+  static_gate_results:
+    paths:
+      - pandaloco/adoption/gates/results/g0-result-v1.json
+      - pandaloco/adoption/gates/results/g1-result-v1.json
+      - pandaloco/adoption/gates/results/g2-result-v1.json
+      - pandaloco/adoption/gates/results/g3-result-v1.json
+      - pandaloco/adoption/gates/results/g4-result-v1.json
+      - pandaloco/adoption/gates/results/g5-result-v1.json
+    subject: pandaloco/adoption/CANDIDATE.sha256
 write_set:
   adoption_tree: pandaloco/adoption/**
   adoption_readme_triplet:

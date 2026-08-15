@@ -19,4 +19,3 @@ allowed_replay_status:
   - replaced-upstream
   - retired
 zero_delta: true
-
