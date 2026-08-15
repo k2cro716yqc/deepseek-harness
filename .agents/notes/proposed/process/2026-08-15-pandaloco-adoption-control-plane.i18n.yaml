@@ -1,0 +1,6 @@
+# Bilingual-pair consistency record (docs/i18n/README.md): the git blob hash of each
+# side as of the last confirmed-consistent state. Both languages carry equal authority;
+# after editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write .agents/notes/proposed/process/2026-08-15-pandaloco-adoption-control-plane.md
+2026-08-15-pandaloco-adoption-control-plane.md: a4a4475b72bbb87cfdb12f59d3f289d5648b9848
+2026-08-15-pandaloco-adoption-control-plane.zh.md: 45ef802da8bbb7de0ba3240537f1ce1b204ae1c3

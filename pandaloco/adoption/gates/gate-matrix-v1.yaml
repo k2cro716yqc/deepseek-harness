@@ -1,0 +1,263 @@
+schema_version: pandaloco-dsh-gates/v1
+unknown_or_missing_result: blocked
+local_reference_base: gate-matrix-directory
+gates:
+  - gate_id: G0
+    name: immutable-source-baseline
+    phase: WP-0
+    accountable_owner: dsh-fork-maintainer
+    dependencies: []
+    fixture: { kind: git-identity, reference: ../source-audits/epoch-0001.md }
+    oracle: exact commit/tree, clean pre-authoring worktree, upstream push disabled, and 0/0 upstream divergence
+    expected_result: pass
+    allowed_effects: [repository-read]
+    platforms: [macos-governance, linux-governance]
+    timeout_seconds: 30
+    repetitions: 1
+    threshold: all-assertions
+    evidence_path: pandaloco-coordination:codex/coordination/session-logs/2026-08-15-dsh-physical-chain-wp0-revision-deep-review.session-log.md
+    current_state: pass
+    failure_code: WP0_BASE_DRIFT
+  - gate_id: G1
+    name: exact-write-set
+    phase: WP-0
+    accountable_owner: dsh-fork-maintainer
+    dependencies: [G0]
+    fixture: { kind: git-diff, reference: ../authority-manifest.yaml }
+    oracle: only pandaloco/adoption/** and the exact Agent Note triplet differ from the base
+    expected_result: pass
+    allowed_effects: [repository-read]
+    platforms: [macos-governance, linux-governance]
+    timeout_seconds: 30
+    repetitions: 1
+    threshold: zero-extra-paths
+    evidence_path: pandaloco-coordination:codex/test-reports/2026-08-15-dsh-wp0-static-validation.test-report.md
+    current_state: pass
+    failure_code: WP0_SCOPE_VIOLATION
+  - gate_id: G2
+    name: syntax-schema-and-bilingual-docs
+    phase: WP-0
+    accountable_owner: dsh-fork-maintainer
+    dependencies: [G1]
+    fixture: { kind: static-doc-schema, reference: ../MANIFEST.sha256 }
+    oracle: YAML and JSON parse, schema examples behave as declared, links resolve, and bilingual blob hashes and structure match
+    expected_result: pass
+    allowed_effects: [repository-read, git-object-hash]
+    platforms: [macos-governance, linux-governance]
+    timeout_seconds: 120
+    repetitions: 1
+    threshold: all-files
+    evidence_path: pandaloco-coordination:codex/test-reports/2026-08-15-dsh-wp0-static-validation.test-report.md
+    current_state: pass
+    failure_code: WP0_SCHEMA_INVALID
+  - gate_id: G3
+    name: authority-contract-counterexamples
+    phase: WP-0
+    accountable_owner: pandaloco-task-authority
+    dependencies: [G2]
+    fixture: { kind: static-counterexamples, reference: ../contracts/terminal-projection-v1.md }
+    oracle: DSH completion, out-of-window events, stale attempts, replayed or model-minted receipts, second writers, and multiple terminal paths are rejected
+    expected_result: pass
+    allowed_effects: [repository-read]
+    platforms: [macos-governance, linux-governance]
+    timeout_seconds: 60
+    repetitions: 1
+    threshold: all-counterexamples
+    evidence_path: pandaloco-coordination:codex/test-reports/2026-08-15-dsh-wp0-static-validation.test-report.md
+    current_state: pass
+    failure_code: WP0_TERMINAL_AUTHORITY_BYPASS
+  - gate_id: G4
+    name: owner-dag
+    phase: WP-0
+    accountable_owner: phys-full-integration
+    dependencies: [G2]
+    fixture: { kind: dag, reference: ../ownership/cross-repo-dag-v1.yaml }
+    oracle: one accountable owner per node, no cycle, available producer contract digests pinned, unavailable contracts explicitly null and red, and projector plus Java/domain authority nodes present
+    expected_result: pass
+    allowed_effects: [repository-read]
+    platforms: [macos-governance, linux-governance]
+    timeout_seconds: 60
+    repetitions: 1
+    threshold: zero-cycles-zero-unowned-nodes-zero-unclassified-contracts
+    evidence_path: pandaloco-coordination:codex/test-reports/2026-08-15-dsh-wp0-static-validation.test-report.md
+    current_state: pass
+    failure_code: WP0_AUTHORITY_CONFLICT
+  - gate_id: G5
+    name: deterministic-manifest-and-hygiene
+    phase: WP-0
+    accountable_owner: dsh-fork-maintainer
+    dependencies: [G1, G2, G3, G4]
+    fixture: { kind: repository-manifest, reference: ../MANIFEST.sha256 }
+    oracle: repo-root-relative lexical manifest reproduces and no secret, absolute host path, production endpoint, or forbidden pass claim exists
+    expected_result: pass
+    allowed_effects: [repository-read, content-hash]
+    platforms: [macos-governance, linux-governance]
+    timeout_seconds: 120
+    repetitions: 1
+    threshold: all-files
+    evidence_path: pandaloco-coordination:codex/test-reports/2026-08-15-dsh-wp0-static-validation.test-report.md
+    current_state: pass
+    failure_code: WP0_MANIFEST_MISMATCH
+  - gate_id: G6
+    name: keyless-no-tool-boot
+    phase: P1
+    accountable_owner: dsh-runtime-owner
+    dependencies: [G5]
+    fixture: { kind: runtime, reference: "future:keyless-no-tool-boot" }
+    oracle: exact epoch boots with explicit empty credential environment and no model, network, MCP, shell, tool, or write effect
+    expected_result: pass
+    allowed_effects: [future-process-start]
+    platforms: [linux-reviewed-outer-sandbox]
+    timeout_seconds: 120
+    repetitions: 3
+    threshold: three-of-three
+    evidence_path: future:pandaloco-runtime-evidence/keyless-boot
+    current_state: blocked
+    failure_code: WP0_RUNTIME_EXECUTION
+  - gate_id: G7
+    name: model-plane-only-adapter
+    phase: P3
+    accountable_owner: phys-model-plane
+    dependencies: [G6, G8]
+    fixture: { kind: contract-and-runtime, reference: ../contracts/physical-execution-chain-v1.md }
+    oracle: every production model edge terminates at /model-tasks and no DSH provider credential, route, fallback, or egress authority loads
+    expected_result: pass
+    allowed_effects: [future-model-plane-call]
+    platforms: [linux-reviewed-outer-sandbox]
+    timeout_seconds: 180
+    repetitions: 3
+    threshold: three-of-three-and-zero-direct-provider-edges
+    evidence_path: future:phys-model-plane/dsh-adapter-evidence
+    current_state: blocked
+    failure_code: WP0_MODEL_PLANE_BYPASS
+  - gate_id: G8
+    name: whole-process-tree-outer-sandbox
+    phase: P3
+    accountable_owner: pandaloco-outer-sandbox
+    dependencies: [G6]
+    fixture: { kind: security-runtime, reference: "future:linux-whole-tree-sandbox-suite" }
+    oracle: process, descendant, auxiliary executable, network, syscall, device, host-read, secret, and writable-root isolation fail closed
+    expected_result: pass
+    allowed_effects: [future-isolated-security-fixture]
+    platforms: [linux-reviewed-outer-sandbox]
+    timeout_seconds: 300
+    repetitions: 3
+    threshold: all-negative-probes-three-of-three
+    evidence_path: future:pandaloco-outer-sandbox/evidence
+    current_state: blocked
+    failure_code: WP0_SANDBOX_FAIL_OPEN
+  - gate_id: G9
+    name: tool-and-specialist-receipts
+    phase: P4
+    accountable_owner: pandaloco-specialist-broker
+    dependencies: [G7, G8]
+    fixture: { kind: broker-runtime, reference: ../contracts/specialist-owner-receipt-v1.schema.json }
+    oracle: only allowlisted broker calls execute and only unique owner-verified receipts matching the current task, attempt, epoch, owner, artifact bytes, digest, and verification material can support terminal projection
+    expected_result: pass
+    allowed_effects: [future-allowlisted-fixture-effect]
+    platforms: [linux-reviewed-outer-sandbox]
+    timeout_seconds: 300
+    repetitions: 3
+    threshold: all-positive-and-negative-cases
+    evidence_path: future:pandaloco-specialist-broker/evidence
+    current_state: blocked
+    failure_code: WP0_AUTHORITY_CONFLICT
+  - gate_id: G10
+    name: persistence-terminal-and-late-event-replay
+    phase: P4
+    accountable_owner: pandaloco-task-authority
+    dependencies: [G8, G9]
+    fixture: { kind: state-replay, reference: ../contracts/epoch-persistence-v1.md }
+    oracle: one writer, immutable epoch, persisted monotonic start and sealed end watermarks, fenced terminal, timeout quarantine, late-event rejection, and rollback order reproduce exactly
+    expected_result: pass
+    allowed_effects: [future-private-fixture-storage]
+    platforms: [linux-reviewed-outer-sandbox]
+    timeout_seconds: 300
+    repetitions: 3
+    threshold: all-state-vectors-three-of-three
+    evidence_path: future:pandaloco-task-authority/replay-evidence
+    current_state: blocked
+    failure_code: WP0_IN_PLACE_EPOCH_UPGRADE
+  - gate_id: G11
+    name: metrics-and-required-watch-readiness
+    phase: P4
+    accountable_owner: phys-observability-stack
+    dependencies: [G7, G8]
+    fixture: { kind: observability, reference: ../contracts/observability-v1.md }
+    oracle: bounded metrics reach Prometheus/Grafana, forbidden labels and content are absent, and every required watch is green or reviewed irrelevant
+    expected_result: pass
+    allowed_effects: [future-metric-emission]
+    platforms: [linux-reviewed-outer-sandbox]
+    timeout_seconds: 300
+    repetitions: 3
+    threshold: all-metrics-and-watches
+    evidence_path: future:phys-observability-stack/dsh-readiness
+    current_state: blocked
+    current_blocker: SERVICE_DATA_PLANE_COMMAND_NOT_CONFIGURED
+    failure_code: WP0_PHYSICAL_READINESS_RED
+  - gate_id: G12
+    name: coexistence-shadow-and-capacity
+    phase: P5
+    accountable_owner: phys-center-control
+    dependencies: [G7, G8, G10, G11]
+    fixture: { kind: replay-and-capacity, reference: ../contracts/runtime-selection-v1.md }
+    oracle: recorded replay is effect-free and any live dual run has worker, GPU, residency, concurrency, time, cost, privacy, and suppression evidence with one authoritative route
+    expected_result: pass
+    allowed_effects: [future-recorded-replay, future-approved-live-model-call]
+    platforms: [linux-reviewed-outer-sandbox]
+    timeout_seconds: 600
+    repetitions: 3
+    threshold: all-capacity-and-effect-assertions
+    evidence_path: future:phys-center-control/dsh-shadow-capacity
+    current_state: blocked
+    failure_code: WP0_UNBUDGETED_LIVE_SHADOW
+  - gate_id: G13
+    name: centralized-log-source-admission
+    phase: P5
+    accountable_owner: physical-centralized-log-plane
+    dependencies: [G11]
+    fixture: { kind: logging-admission, reference: ../contracts/observability-v1.md }
+    oracle: exact source, field allowlist, retention, transport, authentication, redaction, and failure behavior are owner-approved before emission
+    expected_result: pass
+    allowed_effects: [future-admitted-structured-log]
+    platforms: [linux-reviewed-outer-sandbox]
+    timeout_seconds: 300
+    repetitions: 3
+    threshold: all-admission-fields
+    evidence_path: future:physical-centralized-log-plane/dsh-source-admission
+    current_state: blocked
+    current_blocker: real-source-admission-absent
+    failure_code: WP0_LOG_SOURCE_NOT_ADMITTED
+  - gate_id: G14
+    name: physical-onboarding-cutover-and-rollback
+    phase: P5
+    accountable_owner: phys-deploy-ops
+    dependencies: [G8, G10, G11, G12]
+    fixture: { kind: deployment-drill, reference: ../upgrades/upgrade-runbook-v1.md }
+    oracle: versioned service manifest, health, registry, degradation, side-by-side deploy, cutover, rollback, and state reconciliation pass without DSH self-activation
+    expected_result: pass
+    allowed_effects: [future-approved-physical-drill]
+    platforms: [linux-reviewed-outer-sandbox]
+    timeout_seconds: 900
+    repetitions: 1
+    threshold: all-deploy-and-rollback-steps
+    evidence_path: future:phys-deploy-ops/dsh-deployment-drill
+    current_state: blocked
+    current_blocker: phys-agent-services-versioned-onboarding-absent
+    failure_code: WP0_PHYS_OWNER_BYPASS
+  - gate_id: G15
+    name: production-promotion
+    phase: P6
+    accountable_owner: pandaloco-release-authority
+    dependencies: [G7, G8, G9, G10, G11, G12, G14]
+    fixture: { kind: release-manifest, reference: ../upgrades/rollback-manifest-v1.schema.json }
+    oracle: immutable candidate identity, all required gates, independent review, rollback target, capacity headroom, and owner approvals are exact and green
+    expected_result: pass
+    allowed_effects: [future-approved-traffic-selection]
+    platforms: [linux-reviewed-outer-sandbox]
+    timeout_seconds: 900
+    repetitions: 1
+    threshold: all-required-gates-and-owners
+    evidence_path: future:pandaloco-release-authority/dsh-promotion
+    current_state: blocked
+    failure_code: WP0_PHYSICAL_READINESS_RED

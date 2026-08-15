@@ -1,0 +1,223 @@
+schema_version: pandaloco-cross-repo-dag/v1
+edge_semantics: source-node-depends-on-target-node
+edge_contract_binding: each-edge-pins-target-node-contract-digest
+nodes:
+  - id: dsh-fork-distribution
+    accountable_owner: dsh-fork-maintainer
+    repository: https://github.com/k2cro716yqc/deepseek-harness.git
+    base: 47f943859bef60e4160492346772ded9b24f765a
+    contract: pandaloco/adoption/authority-manifest.yaml
+    contract_version: pandaloco-adoption-authority/v1
+    contract_digest_sha256: 0b23d8ff63ff003c5ea699c8710b15132787a7983d8b7505c74b377ee43a54f5
+    contract_state: pinned
+    write_fence: pandaloco/adoption/** plus exact Agent Note triplet
+    evidence_return: pandaloco/adoption/MANIFEST.sha256
+    readiness: proposed
+  - id: pandaloco-task-authority
+    accountable_owner: pdlc-multiagent-local
+    repository: https://github.com/q-y-pandaloco/pdlc-multiagent-local.git
+    base: 44678a1472080f43f91fb3296e7bbe3aacabaf0c
+    contract: codex/contracts/general-agent/api-contract.md
+    contract_version: general-agent-api/current-at-base
+    contract_digest_sha256: ce35538a7c28b27bd2c9a2430a84cac4733a6a544f419a823499b608f1f17108
+    contract_state: pinned
+    write_fence: read-only-in-wp0
+    evidence_return: future:pdlc-multiagent-local/dsh-task-authority
+    readiness: contract-source-only
+  - id: existing-agent-facade
+    accountable_owner: pdlc-multiagent-local
+    repository: https://github.com/q-y-pandaloco/pdlc-multiagent-local.git
+    base: 44678a1472080f43f91fb3296e7bbe3aacabaf0c
+    contract: codex/contracts/general-agent/api-contract.md
+    contract_version: general-agent-api/current-at-base
+    contract_digest_sha256: ce35538a7c28b27bd2c9a2430a84cac4733a6a544f419a823499b608f1f17108
+    contract_state: pinned
+    write_fence: read-only-in-wp0
+    evidence_return: future:pdlc-multiagent-local/dsh-facade-adapter
+    readiness: contract-source-only
+  - id: runtime-selector
+    accountable_owner: pdlc-multiagent-local
+    repository: https://github.com/q-y-pandaloco/pdlc-multiagent-local.git
+    base: 44678a1472080f43f91fb3296e7bbe3aacabaf0c
+    contract: pandaloco/adoption/contracts/runtime-selection-v1.md
+    contract_version: runtime-selection/v1
+    contract_digest_sha256: 4c3f7b7c8b55c6970eebdd9a4b07e47032ed466453cf2be7b06f7182481e9a2d
+    contract_state: pinned
+    write_fence: future-owner-package-required
+    evidence_return: future:pdlc-multiagent-local/runtime-selector
+    readiness: blocked-owner-implementation-absent
+  - id: legacy-agent-runtime
+    accountable_owner: pdlc-multiagent-local
+    repository: https://github.com/q-y-pandaloco/pdlc-multiagent-local.git
+    base: 44678a1472080f43f91fb3296e7bbe3aacabaf0c
+    contract: owner-current-runtime-contracts
+    contract_version: unavailable-in-wp0
+    contract_digest_sha256: null
+    contract_state: unavailable-blocked
+    write_fence: read-only-in-wp0
+    evidence_return: future:pdlc-multiagent-local/legacy-runtime-identity
+    readiness: blocked-live-runtime-contract-unpinned
+  - id: dsh-per-task-worker
+    accountable_owner: dsh-runtime-owner
+    repository: https://github.com/k2cro716yqc/deepseek-harness.git
+    base: 47f943859bef60e4160492346772ded9b24f765a
+    contract: pandaloco/adoption/contracts/internal-attempt-v1.md
+    contract_version: internal-attempt/v1
+    contract_digest_sha256: 600ea4efcd790dece06608acf000054f1b6343c6f54640315e830e11e5d40356
+    contract_state: pinned
+    write_fence: future-owner-package-required
+    evidence_return: future:dsh-runtime-owner/per-task-worker
+    readiness: blocked-runtime-absent
+  - id: outer-sandbox
+    accountable_owner: pandaloco-outer-sandbox
+    repository: future:owner-repository
+    base: unresolved
+    contract: pandaloco/adoption/contracts/platform-matrix-v1.yaml
+    contract_version: platform-matrix/v1
+    contract_digest_sha256: 7105f34c9dc1c80aedd2096e5e117b8a979482bdfd3504fe8de3b33110767f9b
+    contract_state: pinned
+    write_fence: future-owner-package-required
+    evidence_return: future:pandaloco-outer-sandbox/evidence
+    readiness: blocked-ap03-reuse-unauthorized
+  - id: model-plane
+    accountable_owner: phys-model-plane
+    repository: https://github.com/q-y-pandaloco/phys-model-plane.git
+    base: 0d3860929a1bf82f3bb7afb4ba62168c03660b10
+    contract: codex/README.md#model-tasks
+    contract_version: model-plane/current-at-base
+    contract_digest_sha256: c9982944642480ad1bb84637698365bd9c4e35ca7a3194ce9cac9214bb320eae
+    contract_state: pinned
+    write_fence: read-only-in-wp0
+    evidence_return: future:phys-model-plane/dsh-adapter-evidence
+    readiness: live-service-not-dsh-admitted
+  - id: specialist-broker
+    accountable_owner: pandaloco-specialist-broker
+    repository: future:owner-repository
+    base: unresolved
+    contract: pandaloco/adoption/contracts/specialist-owner-receipt-v1.schema.json
+    contract_version: specialist-owner-receipt/v1
+    contract_digest_sha256: 3713e7e79fd08ecbbb0b2d82791d4fecbbc5460371a1be44a7896cd19dea3bdd
+    contract_state: pinned
+    write_fence: future-owner-package-required
+    evidence_return: future:pandaloco-specialist-broker/evidence
+    readiness: blocked-owner-binding-absent
+  - id: domain-authorities
+    accountable_owner: pandaloco-domain-owners
+    repository: multiple-owner-repositories
+    base: per-consumer-review-required
+    contract: owner-specific
+    contract_version: unavailable-per-consumer
+    contract_digest_sha256: null
+    contract_state: unavailable-blocked
+    write_fence: read-only-in-wp0
+    evidence_return: future:domain-owner/receipt-evidence
+    readiness: blocked-per-consumer
+  - id: physical-control-registry
+    accountable_owner: phys-center-control
+    repository: https://github.com/q-y-pandaloco/phys-center-control.git
+    base: 191a20c3658ae360c9a65b1764209f1c63713e49
+    contract: codex/architecture/physical-center-runtime-boundaries.md
+    contract_version: physical-center-runtime-boundaries/current-at-base
+    contract_digest_sha256: 1450df6dab05d9e2e1d2f026de6019da061f10d3615516a60ec37e8fc1e03c4b
+    contract_state: pinned
+    write_fence: read-only-in-wp0
+    evidence_return: future:phys-center-control/dsh-registry
+    readiness: contract-source-only
+  - id: agent-service-onboarding
+    accountable_owner: phys-agent-services
+    repository: unversioned-local-shell
+    base: unresolved-no-commit
+    contract: future:dsh-service-manifest
+    contract_version: unavailable-in-wp0
+    contract_digest_sha256: null
+    contract_state: unavailable-blocked
+    write_fence: future-owner-package-required
+    evidence_return: future:phys-agent-services/dsh-onboarding
+    readiness: blocked-unversioned-owner-artifact
+  - id: deploy-ops
+    accountable_owner: phys-deploy-ops
+    repository: https://github.com/q-y-pandaloco/phys-deploy-ops.git
+    base: 9d1e23514cba6b30f7fc9ea3ec84f95d36b09801
+    contract: codex/README.md
+    contract_version: deploy-ops/current-at-base
+    contract_digest_sha256: 8bdb374c72201bc61c5d441f7a1a6ee399cb86b4b172b03cdaffcf487a5b01cd
+    contract_state: pinned
+    write_fence: read-only-in-wp0
+    evidence_return: future:phys-deploy-ops/dsh-deployment-drill
+    readiness: owner-present-dsh-package-absent
+  - id: metrics-stack
+    accountable_owner: phys-observability-stack
+    repository: https://github.com/q-y-pandaloco/phys-observability-stack.git
+    base: ec2e2a03b475a41ecea825e254546c6012c0ac6d
+    contract: codex/README.md
+    contract_version: observability-stack/current-at-base
+    contract_digest_sha256: 4c8dfc0674970a0a8271c940f2e05b1fd38109263a1086bb8b4435273e8499d5
+    contract_state: pinned
+    write_fence: read-only-in-wp0
+    evidence_return: future:phys-observability-stack/dsh-readiness
+    readiness: live-stack-dsh-contract-absent
+  - id: centralized-log-admission
+    accountable_owner: physical-centralized-log-plane
+    repository: future:owner-repository
+    base: unresolved
+    contract: future:dsh-real-source-admission
+    contract_version: unavailable-in-wp0
+    contract_digest_sha256: null
+    contract_state: unavailable-blocked
+    write_fence: future-owner-package-required
+    evidence_return: future:physical-centralized-log-plane/dsh-source-admission
+    readiness: blocked-real-source-admission-absent
+  - id: phys-full-index
+    accountable_owner: phys-full-integration
+    repository: local-unversioned-coordination
+    base: not-applicable
+    contract: codex/coordination/index.md
+    contract_version: local-snapshot/2026-08-15
+    contract_digest_sha256: 958f828cdc3f8af9d70df58fe8b84d85579ef2a5ed727ac19fc9d2e4002e7e85
+    contract_state: snapshot-pinned-unversioned
+    write_fence: coordination-only
+    evidence_return: pandaloco-coordination:codex/coordination/session-logs
+    readiness: local-durable-not-versioned
+  - id: terminal-projector
+    accountable_owner: pdlc-multiagent-local
+    repository: https://github.com/q-y-pandaloco/pdlc-multiagent-local.git
+    base: 44678a1472080f43f91fb3296e7bbe3aacabaf0c
+    contract: pandaloco/adoption/contracts/terminal-projection-v1.md
+    contract_version: terminal-projection/v1
+    contract_digest_sha256: 603ffc522ad385119797400692425a4c530f2f70a8304c44896b29cf941ca252
+    contract_state: pinned
+    write_fence: future-owner-package-required
+    evidence_return: future:pdlc-multiagent-local/terminal-projector
+    readiness: blocked-owner-implementation-absent
+  - id: java-business-authorities
+    accountable_owner: pandaloco-java-business-authorities
+    repository: multiple-java-owner-repositories
+    base: per-owner-review-required
+    contract: future:java-business-terminal-contract-map
+    contract_version: unavailable-in-wp0
+    contract_digest_sha256: null
+    contract_state: unavailable-blocked
+    write_fence: read-only-in-wp0
+    evidence_return: future:java-business-authorities/terminal-contract-map
+    readiness: blocked-owner-contract-map-absent
+edges:
+  - { source: existing-agent-facade, target: pandaloco-task-authority, target_contract_digest_sha256: ce35538a7c28b27bd2c9a2430a84cac4733a6a544f419a823499b608f1f17108 }
+  - { source: terminal-projector, target: pandaloco-task-authority, target_contract_digest_sha256: ce35538a7c28b27bd2c9a2430a84cac4733a6a544f419a823499b608f1f17108 }
+  - { source: terminal-projector, target: specialist-broker, target_contract_digest_sha256: 3713e7e79fd08ecbbb0b2d82791d4fecbbc5460371a1be44a7896cd19dea3bdd }
+  - { source: terminal-projector, target: java-business-authorities, target_contract_digest_sha256: null }
+  - { source: runtime-selector, target: existing-agent-facade, target_contract_digest_sha256: ce35538a7c28b27bd2c9a2430a84cac4733a6a544f419a823499b608f1f17108 }
+  - { source: runtime-selector, target: pandaloco-task-authority, target_contract_digest_sha256: ce35538a7c28b27bd2c9a2430a84cac4733a6a544f419a823499b608f1f17108 }
+  - { source: legacy-agent-runtime, target: runtime-selector, target_contract_digest_sha256: 4c3f7b7c8b55c6970eebdd9a4b07e47032ed466453cf2be7b06f7182481e9a2d }
+  - { source: dsh-per-task-worker, target: runtime-selector, target_contract_digest_sha256: 4c3f7b7c8b55c6970eebdd9a4b07e47032ed466453cf2be7b06f7182481e9a2d }
+  - { source: dsh-per-task-worker, target: dsh-fork-distribution, target_contract_digest_sha256: 0b23d8ff63ff003c5ea699c8710b15132787a7983d8b7505c74b377ee43a54f5 }
+  - { source: dsh-per-task-worker, target: outer-sandbox, target_contract_digest_sha256: 7105f34c9dc1c80aedd2096e5e117b8a979482bdfd3504fe8de3b33110767f9b }
+  - { source: dsh-per-task-worker, target: model-plane, target_contract_digest_sha256: c9982944642480ad1bb84637698365bd9c4e35ca7a3194ce9cac9214bb320eae }
+  - { source: dsh-per-task-worker, target: specialist-broker, target_contract_digest_sha256: 3713e7e79fd08ecbbb0b2d82791d4fecbbc5460371a1be44a7896cd19dea3bdd }
+  - { source: specialist-broker, target: domain-authorities, target_contract_digest_sha256: null }
+  - { source: agent-service-onboarding, target: physical-control-registry, target_contract_digest_sha256: 1450df6dab05d9e2e1d2f026de6019da061f10d3615516a60ec37e8fc1e03c4b }
+  - { source: agent-service-onboarding, target: dsh-fork-distribution, target_contract_digest_sha256: 0b23d8ff63ff003c5ea699c8710b15132787a7983d8b7505c74b377ee43a54f5 }
+  - { source: deploy-ops, target: agent-service-onboarding, target_contract_digest_sha256: null }
+  - { source: deploy-ops, target: physical-control-registry, target_contract_digest_sha256: 1450df6dab05d9e2e1d2f026de6019da061f10d3615516a60ec37e8fc1e03c4b }
+  - { source: metrics-stack, target: agent-service-onboarding, target_contract_digest_sha256: null }
+  - { source: centralized-log-admission, target: agent-service-onboarding, target_contract_digest_sha256: null }
+  - { source: phys-full-index, target: dsh-fork-distribution, target_contract_digest_sha256: 0b23d8ff63ff003c5ea699c8710b15132787a7983d8b7505c74b377ee43a54f5 }
