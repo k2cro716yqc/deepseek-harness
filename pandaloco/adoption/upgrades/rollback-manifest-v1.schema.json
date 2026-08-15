@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pandaloco.invalid/schemas/rollback-manifest-v1.schema.json",
+  "title": "Pandaloco DSH rollback manifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "epoch_transition",
+    "candidate_artifact_digest_sha256",
+    "known_good_artifact_digest_sha256",
+    "selection_action",
+    "active_attempt_action",
+    "reconciliation_owner",
+    "retention_policy_ref",
+    "created_at"
+  ],
+  "properties": {
+    "schema_version": { "const": "pandaloco-rollback-manifest/v1" },
+    "epoch_transition": {
+      "description": "Ordered as [candidate epoch, known-good epoch].",
+      "items": { "minLength": 1, "type": "string" },
+      "maxItems": 2,
+      "minItems": 2,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "candidate_artifact_digest_sha256": { "pattern": "^[0-9a-f]{64}$", "type": "string" },
+    "known_good_artifact_digest_sha256": { "pattern": "^[0-9a-f]{64}$", "type": "string" },
+    "selection_action": { "const": "select-known-good-for-new-attempts" },
+    "active_attempt_action": { "enum": ["drain", "kill-and-quarantine"] },
+    "reconciliation_owner": { "minLength": 1, "type": "string" },
+    "retention_policy_ref": { "minLength": 1, "type": "string" },
+    "created_at": { "format": "date-time", "type": "string" }
+  },
+  "examples": [
+    {
+      "schema_version": "pandaloco-rollback-manifest/v1",
+      "epoch_transition": ["dsh-epoch-0002", "dsh-epoch-0001"],
+      "candidate_artifact_digest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "known_good_artifact_digest_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "selection_action": "select-known-good-for-new-attempts",
+      "active_attempt_action": "kill-and-quarantine",
+      "reconciliation_owner": "pandaloco-task-authority",
+      "retention_policy_ref": "pandaloco:retention/dsh-attempts-v1",
+      "created_at": "2026-08-15T09:00:00Z"
+    }
+  ],
+  "x-invalid-examples": [
+    {
+      "reason": "created_at is required",
+      "value": {
+        "schema_version": "pandaloco-rollback-manifest/v1",
+        "epoch_transition": ["dsh-epoch-0002", "dsh-epoch-0001"],
+        "candidate_artifact_digest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "known_good_artifact_digest_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "selection_action": "select-known-good-for-new-attempts",
+        "active_attempt_action": "drain",
+        "reconciliation_owner": "pandaloco-task-authority",
+        "retention_policy_ref": "pandaloco:retention/dsh-attempts-v1"
+      }
+    },
+    {
+      "reason": "active attempt action is a closed enum",
+      "value": {
+        "schema_version": "pandaloco-rollback-manifest/v1",
+        "epoch_transition": ["dsh-epoch-0002", "dsh-epoch-0001"],
+        "candidate_artifact_digest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "known_good_artifact_digest_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "selection_action": "select-known-good-for-new-attempts",
+        "active_attempt_action": "resume",
+        "reconciliation_owner": "pandaloco-task-authority",
+        "retention_policy_ref": "pandaloco:retention/dsh-attempts-v1",
+        "created_at": "2026-08-15T09:00:00Z"
+      }
+    },
+    {
+      "reason": "artifact digest must be lowercase SHA-256",
+      "value": {
+        "schema_version": "pandaloco-rollback-manifest/v1",
+        "epoch_transition": ["dsh-epoch-0002", "dsh-epoch-0001"],
+        "candidate_artifact_digest_sha256": "bad",
+        "known_good_artifact_digest_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "selection_action": "select-known-good-for-new-attempts",
+        "active_attempt_action": "drain",
+        "reconciliation_owner": "pandaloco-task-authority",
+        "retention_policy_ref": "pandaloco:retention/dsh-attempts-v1",
+        "created_at": "2026-08-15T09:00:00Z"
+      }
+    },
+    {
+      "reason": "candidate and known-good epochs must differ",
+      "value": {
+        "schema_version": "pandaloco-rollback-manifest/v1",
+        "epoch_transition": ["dsh-epoch-0001", "dsh-epoch-0001"],
+        "candidate_artifact_digest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "known_good_artifact_digest_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "selection_action": "select-known-good-for-new-attempts",
+        "active_attempt_action": "drain",
+        "reconciliation_owner": "pandaloco-task-authority",
+        "retention_policy_ref": "pandaloco:retention/dsh-attempts-v1",
+        "created_at": "2026-08-15T09:00:00Z"
+      }
+    },
+    {
+      "reason": "in-place resume is forbidden",
+      "value": {
+        "schema_version": "pandaloco-rollback-manifest/v1",
+        "epoch_transition": ["dsh-epoch-0002", "dsh-epoch-0001"],
+        "candidate_artifact_digest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "known_good_artifact_digest_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "selection_action": "resume-active-attempts-on-known-good",
+        "active_attempt_action": "drain",
+        "reconciliation_owner": "pandaloco-task-authority",
+        "retention_policy_ref": "pandaloco:retention/dsh-attempts-v1",
+        "created_at": "2026-08-15T09:00:00Z"
+      }
+    }
+  ]
+}

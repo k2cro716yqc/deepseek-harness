@@ -1,0 +1,45 @@
+schema_version: pandaloco-runtime-epoch/v1
+epoch_id: dsh-epoch-0001
+status: declared-not-built-not-tested
+source:
+  upstream_commit: 47f943859bef60e4160492346772ded9b24f765a
+  upstream_tree: f904efab9ef435201d6ba4da88a34d6366568272
+  upstream_version: pre-release-unresolved
+  fork_tree: f904efab9ef435201d6ba4da88a34d6366568272
+  downstream_delta:
+    entry_count: 0
+    digest_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+configuration:
+  status: unresolved
+  digest_sha256: null
+  rule: a runtime candidate must record the complete resolved configuration before execution
+artifact:
+  status: absent
+  identity: null
+  digest_sha256: null
+  provenance_digest_sha256: null
+  rule: a core-patched epoch must use a fork-built artifact and every executable epoch must identify tested bytes
+supply_chain:
+  sbom_digest_sha256: null
+  license_digest_sha256: null
+patch_ledger:
+  path: patch-ledger.yaml
+  entry_count: 0
+  digest_sha256: b82cb28532b1e9c136b14366ddbba8d7f347e6d74cd9aca87f213e81aa2c8d27
+session_root_policy: one-private-root-per-epoch-and-attempt
+gate_matrix:
+  path: ../gates/gate-matrix-v1.yaml
+  version: pandaloco-dsh-gates/v1
+rollback_manifest:
+  status: absent
+  digest_sha256: null
+promotion: blocked
+blocked_by:
+  - resolved-configuration
+  - tested-artifact
+  - build-provenance
+  - sbom-and-license
+  - outer-sandbox
+  - physical-service-onboarding
+  - capacity-budget
+  - runtime-gates

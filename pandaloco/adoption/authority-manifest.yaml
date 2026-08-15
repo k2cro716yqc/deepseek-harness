@@ -1,0 +1,72 @@
+schema_version: pandaloco-adoption-authority/v1
+adoption_id: pandaloco-deepseek-harness
+status: proposed-static-control-plane
+source:
+  upstream_repository: https://github.com/deepseek-ai/deepseek-harness.git
+  fork_repository: https://github.com/k2cro716yqc/deepseek-harness.git
+  candidate_branch: pandaloco/wp0-adoption-control-plane
+  base_commit: 47f943859bef60e4160492346772ded9b24f765a
+  base_tree: f904efab9ef435201d6ba4da88a34d6366568272
+  downstream_source_delta: zero
+decision_records:
+  - id: D28-D30
+    reference: pandaloco-coordination:codex/proposals/reviews/2026-08-15-dsh-three-control-invariants.decision-lock.md
+  - id: D31-D36
+    reference: pandaloco-coordination:codex/proposals/reviews/2026-08-15-dsh-physical-chain-integration.decision-lock.md
+  - id: D37
+    reference: pandaloco-coordination:codex/proposals/reviews/2026-08-15-dsh-wp0-readme-pairing-scope.decision-lock.md
+normative_rules:
+  business_terminal_owner: pandaloco-task-authority
+  v1_worker_topology: one-active-attempt-per-linux-process
+  outer_sandbox: required-fail-closed-whole-process-tree
+  source_governance: tracked-fork
+  promotion: immutable-epoch-side-by-side
+  production_model_path: phys-model-plane/model-tasks
+  public_ingress: existing-pandaloco-facade
+  deployment_owner: phys-deploy-ops
+  metrics_owner: phys-observability-stack
+  centralized_log_admission: required-before-emission
+identity_manifests:
+  candidate_subject:
+    path: pandaloco/adoption/CANDIDATE.sha256
+    excludes:
+      - pandaloco/adoption/CANDIDATE.sha256
+      - pandaloco/adoption/MANIFEST.sha256
+      - pandaloco/adoption/gates/results/**
+  distribution:
+    path: pandaloco/adoption/MANIFEST.sha256
+    excludes:
+      - pandaloco/adoption/MANIFEST.sha256
+  static_gate_results:
+    paths:
+      - pandaloco/adoption/gates/results/g0-result-v1.json
+      - pandaloco/adoption/gates/results/g1-result-v1.json
+      - pandaloco/adoption/gates/results/g2-result-v1.json
+      - pandaloco/adoption/gates/results/g3-result-v1.json
+      - pandaloco/adoption/gates/results/g4-result-v1.json
+      - pandaloco/adoption/gates/results/g5-result-v1.json
+    subject: pandaloco/adoption/CANDIDATE.sha256
+write_set:
+  adoption_tree: pandaloco/adoption/**
+  adoption_readme_triplet:
+    - pandaloco/adoption/README.md
+    - pandaloco/adoption/README.zh.md
+    - pandaloco/adoption/README.i18n.yaml
+  agent_note_triplet:
+    - .agents/notes/proposed/process/2026-08-15-pandaloco-adoption-control-plane.md
+    - .agents/notes/proposed/process/2026-08-15-pandaloco-adoption-control-plane.zh.md
+    - .agents/notes/proposed/process/2026-08-15-pandaloco-adoption-control-plane.i18n.yaml
+public_contract_delta: none
+runtime_evidence: absent
+authorization_ceiling:
+  allowed:
+    - documentation
+    - yaml-json-schema-authoring
+    - static-validation
+  forbidden:
+    - dependency-install
+    - build-or-boot
+    - model-mcp-http-shell-or-tool-call
+    - sandbox-enforcement-run
+    - physical-host-mutation
+    - commit-merge-push-pr-or-deployment

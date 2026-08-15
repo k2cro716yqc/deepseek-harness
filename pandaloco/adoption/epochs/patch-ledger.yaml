@@ -1,0 +1,21 @@
+schema_version: pandaloco-dsh-patch-ledger/v1
+epoch_id: dsh-epoch-0001
+source_base_commit: 47f943859bef60e4160492346772ded9b24f765a
+entries: []
+entry_contract:
+  required_fields:
+    - patch_id
+    - reason
+    - upstream_base
+    - affected_paths
+    - patch_digest_sha256
+    - validation_refs
+    - upstream_replacement
+    - removal_condition
+    - replay_status
+allowed_replay_status:
+  - pending
+  - applied
+  - replaced-upstream
+  - retired
+zero_delta: true

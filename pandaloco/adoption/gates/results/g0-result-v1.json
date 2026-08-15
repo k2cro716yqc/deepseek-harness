@@ -1,0 +1,27 @@
+{
+  "schema_version": "pandaloco-gate-result/v1",
+  "matrix_version": "pandaloco-dsh-gates/v1",
+  "subject": {
+    "adoption_id": "pandaloco-deepseek-harness",
+    "runtime_epoch": "dsh-epoch-0001",
+    "candidate_manifest_reference": "pandaloco/adoption/CANDIDATE.sha256",
+    "candidate_manifest_digest_sha256": "1f2bdef6579c03973dd346568dc31e821f13810e03648ef96fbe61b14a0983ba",
+    "source_commit": "47f943859bef60e4160492346772ded9b24f765a",
+    "source_tree": "f904efab9ef435201d6ba4da88a34d6366568272",
+    "resolved_config_digest_sha256": null,
+    "gate_subject_digests": [
+      { "role": "source-audit", "digest_sha256": "9317bb12e1bac3793608abf795da14529bac3a2e5df28f4dcc2301d90754b75c" }
+    ]
+  },
+  "gate_id": "G0",
+  "evaluated_at": "2026-08-15T16:41:31Z",
+  "status": "pass",
+  "expected_result": "exact source identity and clean immutable baseline",
+  "actual_result": "exact source identity and clean immutable baseline",
+  "oracle_decision": "matched",
+  "evidence": [
+    { "reference": "pandaloco/adoption/source-audits/epoch-0001.md", "digest_sha256": "9317bb12e1bac3793608abf795da14529bac3a2e5df28f4dcc2301d90754b75c" }
+  ],
+  "evaluator": "pandaloco-wp0-static-validator/v2",
+  "failure_code": null
+}

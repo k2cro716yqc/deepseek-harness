@@ -1,0 +1,253 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pandaloco.invalid/schemas/gate-result-v1.schema.json",
+  "title": "Pandaloco DSH gate result v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "matrix_version",
+    "subject",
+    "gate_id",
+    "evaluated_at",
+    "status",
+    "expected_result",
+    "actual_result",
+    "oracle_decision",
+    "evidence",
+    "evaluator"
+  ],
+  "properties": {
+    "schema_version": { "const": "pandaloco-gate-result/v1" },
+    "matrix_version": { "const": "pandaloco-dsh-gates/v1" },
+    "subject": {
+      "additionalProperties": false,
+      "properties": {
+        "adoption_id": { "const": "pandaloco-deepseek-harness" },
+        "runtime_epoch": { "minLength": 1, "type": "string" },
+        "candidate_manifest_reference": { "const": "pandaloco/adoption/CANDIDATE.sha256" },
+        "candidate_manifest_digest_sha256": { "pattern": "^[0-9a-f]{64}$", "type": "string" },
+        "source_commit": { "pattern": "^[0-9a-f]{40}$", "type": "string" },
+        "source_tree": { "pattern": "^[0-9a-f]{40}$", "type": "string" },
+        "resolved_config_digest_sha256": { "pattern": "^[0-9a-f]{64}$", "type": ["string", "null"] },
+        "gate_subject_digests": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "role": { "minLength": 1, "type": "string" },
+              "digest_sha256": { "pattern": "^[0-9a-f]{64}$", "type": "string" }
+            },
+            "required": ["role", "digest_sha256"],
+            "type": "object"
+          },
+          "minItems": 1,
+          "type": "array"
+        }
+      },
+      "required": ["adoption_id", "runtime_epoch", "candidate_manifest_reference", "candidate_manifest_digest_sha256", "source_commit", "source_tree", "resolved_config_digest_sha256", "gate_subject_digests"],
+      "type": "object"
+    },
+    "gate_id": { "pattern": "^G(?:[0-9]|1[0-5])$", "type": "string" },
+    "evaluated_at": { "format": "date-time", "type": "string" },
+    "status": { "enum": ["pass", "fail", "blocked"] },
+    "expected_result": { "minLength": 1, "type": "string" },
+    "actual_result": { "minLength": 1, "type": "string" },
+    "oracle_decision": { "enum": ["matched", "mismatched", "not-run"] },
+    "evidence": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "digest_sha256": { "pattern": "^[0-9a-f]{64}$", "type": "string" },
+          "reference": { "minLength": 1, "type": "string" }
+        },
+        "required": ["reference", "digest_sha256"],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "evaluator": { "minLength": 1, "type": "string" },
+    "failure_code": { "pattern": "^WP0_[A-Z0-9_]+$", "type": ["string", "null"] }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "pass" } } },
+      "then": { "properties": { "evidence": { "minItems": 1 }, "failure_code": { "type": "null" }, "oracle_decision": { "const": "matched" } }, "required": ["failure_code"] }
+    },
+    {
+      "if": { "properties": { "status": { "const": "fail" } } },
+      "then": { "properties": { "failure_code": { "type": "string" }, "oracle_decision": { "const": "mismatched" } }, "required": ["failure_code"] }
+    },
+    {
+      "if": { "properties": { "status": { "const": "blocked" } } },
+      "then": { "properties": { "failure_code": { "type": "string" }, "oracle_decision": { "const": "not-run" } }, "required": ["failure_code"] }
+    }
+  ],
+  "x-verifier-contract": {
+    "authority": "pandaloco-gate-evaluator",
+    "required_context": ["expected_runtime_epoch", "expected_candidate_manifest_reference", "expected_candidate_manifest_digest_sha256", "expected_source_commit", "expected_source_tree", "expected_resolved_config_digest_sha256", "gate_matrix_row", "gate_specific_subject_digests"],
+    "required_checks": ["subject-exactly-equals-current-context", "gate-row-exists-and-version-matches", "evidence-digests-reproduce", "actual-result-evaluated-by-row-oracle", "pass-only-when-oracle-matched"],
+    "reuse_rule": "a result from another epoch, candidate manifest, source tree, resolved configuration, or gate-specific subject is rejected"
+  },
+  "examples": [
+    {
+      "schema_version": "pandaloco-gate-result/v1",
+      "matrix_version": "pandaloco-dsh-gates/v1",
+      "subject": {
+        "adoption_id": "pandaloco-deepseek-harness",
+        "runtime_epoch": "dsh-epoch-0001",
+        "candidate_manifest_reference": "pandaloco/adoption/CANDIDATE.sha256",
+        "candidate_manifest_digest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_commit": "47f943859bef60e4160492346772ded9b24f765a",
+        "source_tree": "f904efab9ef435201d6ba4da88a34d6366568272",
+        "resolved_config_digest_sha256": null,
+        "gate_subject_digests": [{ "role": "source-audit", "digest_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" }]
+      },
+      "gate_id": "G0",
+      "evaluated_at": "2026-08-15T09:00:00Z",
+      "status": "pass",
+      "expected_result": "exact source identity",
+      "actual_result": "exact source identity",
+      "oracle_decision": "matched",
+      "evidence": [{ "reference": "source-audits/epoch-0001.md", "digest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" }],
+      "evaluator": "pandaloco-static-review",
+      "failure_code": null
+    }
+  ],
+  "x-context-invalid-examples": [
+    { "reason": "old candidate manifest", "subject_patch": { "candidate_manifest_digest_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" } },
+    { "reason": "wrong runtime epoch", "subject_patch": { "runtime_epoch": "dsh-epoch-other" } },
+    { "reason": "wrong source tree", "subject_patch": { "source_tree": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" } },
+    { "reason": "wrong gate-specific subject", "subject_patch": { "gate_subject_digests": [{ "role": "source-audit", "digest_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" }] } }
+  ],
+  "x-invalid-examples": [
+    {
+      "reason": "evaluator is required",
+      "value": {
+        "schema_version": "pandaloco-gate-result/v1",
+        "matrix_version": "pandaloco-dsh-gates/v1",
+        "subject": {
+          "adoption_id": "pandaloco-deepseek-harness",
+          "runtime_epoch": "dsh-epoch-0001",
+          "candidate_manifest_reference": "pandaloco/adoption/CANDIDATE.sha256",
+          "candidate_manifest_digest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_commit": "47f943859bef60e4160492346772ded9b24f765a",
+          "source_tree": "f904efab9ef435201d6ba4da88a34d6366568272",
+          "resolved_config_digest_sha256": null,
+          "gate_subject_digests": [{ "role": "source-audit", "digest_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" }]
+        },
+        "gate_id": "G0",
+        "evaluated_at": "2026-08-15T09:00:00Z",
+        "status": "blocked",
+        "expected_result": "exact source identity",
+        "actual_result": "missing",
+        "oracle_decision": "not-run",
+        "evidence": [],
+        "failure_code": "WP0_BASE_DRIFT"
+      }
+    },
+    {
+      "reason": "status is a closed enum",
+      "value": {
+        "schema_version": "pandaloco-gate-result/v1",
+        "matrix_version": "pandaloco-dsh-gates/v1",
+        "subject": {
+          "adoption_id": "pandaloco-deepseek-harness",
+          "runtime_epoch": "dsh-epoch-0001",
+          "candidate_manifest_reference": "pandaloco/adoption/CANDIDATE.sha256",
+          "candidate_manifest_digest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_commit": "47f943859bef60e4160492346772ded9b24f765a",
+          "source_tree": "f904efab9ef435201d6ba4da88a34d6366568272",
+          "resolved_config_digest_sha256": null,
+          "gate_subject_digests": [{ "role": "source-audit", "digest_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" }]
+        },
+        "gate_id": "G0",
+        "evaluated_at": "2026-08-15T09:00:00Z",
+        "status": "unknown",
+        "expected_result": "exact source identity",
+        "actual_result": "unknown",
+        "oracle_decision": "not-run",
+        "evidence": [],
+        "evaluator": "pandaloco-static-review",
+        "failure_code": "WP0_BASE_DRIFT"
+      }
+    },
+    {
+      "reason": "evidence digest must be lowercase SHA-256",
+      "value": {
+        "schema_version": "pandaloco-gate-result/v1",
+        "matrix_version": "pandaloco-dsh-gates/v1",
+        "subject": {
+          "adoption_id": "pandaloco-deepseek-harness",
+          "runtime_epoch": "dsh-epoch-0001",
+          "candidate_manifest_reference": "pandaloco/adoption/CANDIDATE.sha256",
+          "candidate_manifest_digest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_commit": "47f943859bef60e4160492346772ded9b24f765a",
+          "source_tree": "f904efab9ef435201d6ba4da88a34d6366568272",
+          "resolved_config_digest_sha256": null,
+          "gate_subject_digests": [{ "role": "source-audit", "digest_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" }]
+        },
+        "gate_id": "G0",
+        "evaluated_at": "2026-08-15T09:00:00Z",
+        "status": "pass",
+        "expected_result": "exact source identity",
+        "actual_result": "exact source identity",
+        "oracle_decision": "matched",
+        "evidence": [{ "reference": "source-audits/epoch-0001.md", "digest_sha256": "bad" }],
+        "evaluator": "pandaloco-static-review",
+        "failure_code": null
+      }
+    },
+    {
+      "reason": "pass cannot omit evidence",
+      "value": {
+        "schema_version": "pandaloco-gate-result/v1",
+        "matrix_version": "pandaloco-dsh-gates/v1",
+        "subject": {
+          "adoption_id": "pandaloco-deepseek-harness",
+          "runtime_epoch": "dsh-epoch-0001",
+          "candidate_manifest_reference": "pandaloco/adoption/CANDIDATE.sha256",
+          "candidate_manifest_digest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_commit": "47f943859bef60e4160492346772ded9b24f765a",
+          "source_tree": "f904efab9ef435201d6ba4da88a34d6366568272",
+          "resolved_config_digest_sha256": null,
+          "gate_subject_digests": [{ "role": "source-audit", "digest_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" }]
+        },
+        "gate_id": "G0",
+        "evaluated_at": "2026-08-15T09:00:00Z",
+        "status": "pass",
+        "expected_result": "exact source identity",
+        "actual_result": "unknown",
+        "oracle_decision": "matched",
+        "evidence": [],
+        "evaluator": "pandaloco-static-review",
+        "failure_code": null
+      }
+    },
+    {
+      "reason": "pass requires a matched oracle decision",
+      "value": {
+        "schema_version": "pandaloco-gate-result/v1",
+        "matrix_version": "pandaloco-dsh-gates/v1",
+        "subject": {
+          "adoption_id": "pandaloco-deepseek-harness",
+          "runtime_epoch": "dsh-epoch-0001",
+          "candidate_manifest_reference": "pandaloco/adoption/CANDIDATE.sha256",
+          "candidate_manifest_digest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_commit": "47f943859bef60e4160492346772ded9b24f765a",
+          "source_tree": "f904efab9ef435201d6ba4da88a34d6366568272",
+          "resolved_config_digest_sha256": null,
+          "gate_subject_digests": [{ "role": "source-audit", "digest_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" }]
+        },
+        "gate_id": "G0",
+        "evaluated_at": "2026-08-15T09:00:00Z",
+        "status": "pass",
+        "expected_result": "exact source identity",
+        "actual_result": "mismatch",
+        "oracle_decision": "mismatched",
+        "evidence": [{ "reference": "source-audits/epoch-0001.md", "digest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" }],
+        "evaluator": "pandaloco-static-review",
+        "failure_code": null
+      }
+    }
+  ]
+}

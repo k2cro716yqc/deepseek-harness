@@ -1,0 +1,31 @@
+schema_version: pandaloco-platform-matrix/v1
+platforms:
+  linux-reviewed-outer-sandbox:
+    governance: allowed
+    fixture-and-static: allowed
+    keyless-no-tool-boot: blocked-pending-separate-authorization
+    live-model-tool-write-exec: blocked-pending-all-runtime-gates
+    production: blocked
+  macos-host-native:
+    governance: allowed
+    fixture-and-static: allowed
+    keyless-no-tool-boot: blocked-pending-separate-authorization
+    live-model-tool-write-exec: unsupported-fail-closed
+    production: unsupported-fail-closed
+  ap03-hard-backend:
+    governance: evidence-source-only
+    fixture-and-static: blocked
+    keyless-no-tool-boot: blocked
+    live-model-tool-write-exec: blocked
+    production: blocked
+    reasons:
+      - implementation-non-frozen
+      - provider-pass-false
+      - generalization-not-reviewed
+requirements:
+  v1_worker_process: linux-only
+  outer_sandbox: whole-process-tree-fail-closed
+  auxiliary_executables: same-outer-authority
+  clean_environment: required
+  per_attempt_roots: required
+unknown_platform_result: unsupported-fail-closed
